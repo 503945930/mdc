@@ -21,11 +21,7 @@ exports.start = function (callback) {
          // console.log(msg.content.toString())
           require(adapter.require).create(adapter).emit('message', JSON.parse(msg.content.toString()), function (err) {
             if (err) {
-              if (retry < 5) {
-                console.error(`Failed to publish message. Retry for ${retry} times.`)
-                retry++
-                ch.noack(msg)
-              }
+              ch.ack(msg)
               return new Error(`Failed to comsume message ${msg.content.toString()}`)
             }
             ch.ack(msg)
